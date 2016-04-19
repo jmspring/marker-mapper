@@ -6,7 +6,9 @@ var config = {
         redmond: { lat: 47.6740, lon: -122.1215 },
         dublin: { lat: 53.3498, lon: -6.2603 }
     },
-    mapkey: process.env.MAPBASE_KEY
+    mapkey: process.env.MAPBASE_KEY,
+    fetchsvc: process.env.FETCH_HOST,
+    fetchport: process.env.FETCH_PORT
 };
 
 module.exports = config;

@@ -7,6 +7,7 @@ ADD public ./public
 ADD routes ./routes
 ADD tests ./tests
 ADD views ./views
+ADD config ./config
 
 RUN apk add --no-cache make gcc g++ python bash
 RUN npm install

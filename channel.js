@@ -1,6 +1,8 @@
 var socketio = require('socket.io');
 var socketioclient = require('socket.io-client');
 
+var config = require('./config/config');
+
 var channel = {
     io: null,
     initialize: function(server) {
@@ -21,7 +23,7 @@ var channel = {
                     console.log("Client information: " + data);
                     
                     // now open pipe to data service
-                    clientpipe = socketioclient.connect('http://localhost:3100/points');
+                    clientpipe = socketioclient.connect('http://' + config.fetchsvc + ':' + config.fetchport + '/points');
                     clientpipe.on('connect', function() {
                         console.log("Connected to client pipe.");
                         pipeconnected = true;
