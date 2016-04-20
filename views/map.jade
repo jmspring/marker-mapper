@@ -10,25 +10,74 @@ block content
             id: 'mapbox.streets',
             accessToken: '#{mapdata.key}'
         }).addTo(map);        
+
         var markerseq = 0;
+        var done = false;
         var info = {
             id: '#{mapdata.clientid}',
             lat: #{mapdata.lat}, 
             lon: #{mapdata.lon}
         };
-        var client = io.connect('/client');
-        client.on('connect', function() {    
-            client.emit('hello', JSON.stringify(info));
-        }); 
-        client.on('status', function() {
-            client.emit('status', JSON.stringify( { markerseq: markerseq } ));
-        });
-        client.on('point', function(data) {
-            console.log("Got point: " + data);
-            info = JSON.parse(data);
-            var marker = L.marker([info.latitude, info.longitude]).addTo(map);
-            marker.bindPopup("<a href=\"" + info.link + "\">" + info.name + "</a>");
-            markerseq++;
-        });
+        
+        var client = null;
+        function init_client() {
+            client = io.connect('/client', {
+                'forceNew': true,
+                'reconnection': true,
+                'reconnectionDelay': 1000,
+                'reconnectionMaxDelay': 6000,
+                'reconnectionAttempts': 6
+            });
+            
+            // socket.io client events
+            client.on('connect', function() { 
+                if(!done) {   
+                    client.emit('hello', JSON.stringify(info));
+                } else {
+                    client.disconnect();
+                }
+            });
+            client.on('reconnect_failed', function() {
+                if(!done) {
+                    client.disconnect();
+                    setTimeout(function() {
+                        init_client();
+                    }, 3000);
+                } else  {
+                    client = null;
+                }
+            });
+            client.on('disconnect', function() {
+                client = null;
+            });
+            client.on('error', function(err) {
+                console.log('Error: ' + err);
+            });
+            client.on('reconnect_error', function(err) {
+                console.log('Reconnect error: ' + err);
+            });
+            
+            // socket.io application events
+            client.on('status', function() {
+                console.log('Request for client status.');
+                client.emit('status', JSON.stringify({ 
+                    markerseq: markerseq,
+                    done: done
+                }));
+            });
+            client.on('done', function() {
+                console.log('Marker streaming done.');
+                done = true;
+                client.disconnect();
+            });
+            client.on('point', function(data) {
+                console.log("Got point: " + data);
+                info = JSON.parse(data);
+                var marker = L.marker([info.latitude, info.longitude]).addTo(map);
+                marker.bindPopup("<a href=\"" + info.link + "\">" + info.name + "</a>");
+                markerseq++;
+            });
+        }
+        init_client();
         
         
