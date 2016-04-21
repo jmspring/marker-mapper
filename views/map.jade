@@ -25,8 +25,8 @@ block content
             client = io.connect('/client', {
                 'reconnection': true,
                 'reconnectionDelay': 1000,
-                'reconnectionMaxDelay': 6000,
-                'reconnectionAttempts': 6
+                'reconnectionMaxDelay': 3000,
+                'reconnectionAttempts': 15
             });
             
             // socket.io client events

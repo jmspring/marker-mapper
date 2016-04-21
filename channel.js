@@ -49,8 +49,8 @@ var channel = {
                     fetchpipe = socketioclient.connect(pipeurl, {
                         'reconnection': true,
                         'reconnectionDelay': 1000,
-                        'reconnectionMaxDelay': 6000,
-                        'reconnectionAttempts': 6
+                        'reconnectionMaxDelay': 3000,
+                        'reconnectionAttempts': 15
                     });
                     fetchpipe.on('connect', function() {
                         console.log('Connected to ' + pipeurl);
