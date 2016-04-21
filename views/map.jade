@@ -32,6 +32,8 @@ block content
             // socket.io client events
             client.on('connect', function() { 
                 if(!done) {   
+                    console.log('client -- ' + client);
+                    console.log('info -- ' + info);
                     client.emit('hello', JSON.stringify(info));
                 } else {
                     client.disconnect();
