@@ -13,16 +13,16 @@ block content
 
         var markerseq = 0;
         var done = false;
-        var info = {
+        var clientinfo = {
             id: '#{mapdata.clientid}',
             lat: #{mapdata.lat}, 
             lon: #{mapdata.lon}
         };
         
         var client = null;
+        var connected = false;
         function init_client() {
             client = io.connect('/client', {
-                'forceNew': true,
                 'reconnection': true,
                 'reconnectionDelay': 1000,
                 'reconnectionMaxDelay': 6000,
@@ -31,26 +31,30 @@ block content
             
             // socket.io client events
             client.on('connect', function() { 
+                console.log('Connected.');
+                connected = true;
                 if(!done) {   
-                    console.log('client -- ' + client);
-                    console.log('info -- ' + info);
-                    client.emit('hello', JSON.stringify(info));
+                    console.log('Emit hello.');
+                    client.emit('hello', JSON.stringify(clientinfo));
                 } else {
+                    console.log('Markers done.');
                     client.disconnect();
                 }
             });
             client.on('reconnect_failed', function() {
                 if(!done) {
-                    client.disconnect();
+                    console.log('Reconnect failed.  Retry, not done.');
                     setTimeout(function() {
                         init_client();
                     }, 3000);
                 } else  {
-                    client = null;
+                    console.log('Reconnect failed.  Dont Retry, done.');
+                    client.disconnect();
                 }
             });
             client.on('disconnect', function() {
-                client = null;
+                console.log('Disconnected.');
+                connected = false;
             });
             client.on('error', function(err) {
                 console.log('Error: ' + err);
@@ -62,21 +66,25 @@ block content
             // socket.io application events
             client.on('status', function() {
                 console.log('Request for client status.');
-                client.emit('status', JSON.stringify({ 
-                    markerseq: markerseq,
-                    done: done
-                }));
+                if(connected) {
+                    client.emit('status', JSON.stringify({ 
+                        markerseq: markerseq,
+                        done: done
+                    }));
+                }
             });
             client.on('done', function() {
                 console.log('Marker streaming done.');
                 done = true;
-                client.disconnect();
+                if(connected) {
+                    client.disconnect();
+                }   
             });
             client.on('point', function(data) {
                 console.log("Got point: " + data);
-                info = JSON.parse(data);
-                var marker = L.marker([info.latitude, info.longitude]).addTo(map);
-                marker.bindPopup("<a href=\"" + info.link + "\">" + info.name + "</a>");
+                point = JSON.parse(data);
+                var marker = L.marker([point.latitude, point.longitude]).addTo(map);
+                marker.bindPopup("<a href=\"" + point.link + "\">" + point.name + "</a>");
                 markerseq++;
             });
         }

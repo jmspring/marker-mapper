@@ -47,7 +47,6 @@ var channel = {
                     var pipeurl = 'http://' + config.fetchsvc + ':' + config.fetchport + '/points';
                     console.log('Attempting to connect to: ' + pipeurl);
                     fetchpipe = socketioclient.connect(pipeurl, {
-                        'forceNew': true,
                         'reconnection': true,
                         'reconnectionDelay': 1000,
                         'reconnectionMaxDelay': 6000,
@@ -56,7 +55,7 @@ var channel = {
                     fetchpipe.on('connect', function() {
                         console.log('Connected to ' + pipeurl);
                         fetchpipeconnected = true;
-                        fetchpipe.emit('client', data);
+                        fetchpipe.emit('client', JSON.stringify(clientinfo));
                         socket.emit('status');
                     });
                     fetchpipe.on('disconnect', function() {
@@ -64,12 +63,12 @@ var channel = {
                         fetchpipeconnected = false;
                     });
                     fetchpipe.on('reconnect', function() {
-                        fetchpipe.emit('client', data);
-                        socket.emit(status);
+                        fetchpipe.emit('client', JSON.stringify(clientinfo));
+                        socket.emit('status');
                     });
-                    fetchpipe.on('point', function(data) {
-                        console.log('Sending client point: ' + data);
-                        socket.emit('point', data);
+                    fetchpipe.on('point', function(pdata) {
+                        console.log('Sending client point: ' + pdata);
+                        socket.emit('point', pdata);
                     });
                     fetchpipe.on('done', function() {
                         console.log('Telling client done.');
@@ -77,10 +76,10 @@ var channel = {
                         fetchpipe.disconnect();
                     });
                 });
-                socket.on('status', function(data) {
-                    console.log('Sending browser status to fetch pipe: ' + data);
+                socket.on('status', function(sdata) {
+                    console.log('Sending browser status to fetch pipe: ' + sdata);
                     if(fetchpipeconnected) {
-                        fetchpipe.emit('status', data)
+                        fetchpipe.emit('status', sdata)
                     }
                 });
             });
