@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 });
 
 /* GET Map page. */
-router.get('/map', function(req,res) {
+router.get((process.env.PATH_PREFIX ? process.env.PATH_PREIX : '') + '/map', function(req,res) {
     var db = req.db;
     res.render('map', { 
         mapdata: {
