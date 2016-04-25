@@ -4,7 +4,7 @@ var request = require('request');
 
 var config = require('./config/config');
 
-var RETRY_ATTEMPTS = 15;
+var RETRY_ATTEMPTS = 30;
 var RETRY_DELAY = 1000;
 var RETRY_MAX_DELAY = 3000;
 
@@ -63,16 +63,12 @@ var fetch_pipe = {
         request
             .get(pipe.baseurl)
             .on('response', function(res) {
-                console.log("\n\n------------------------------------------------");
-                console.log(res.headers);
-                console.log("------------------------------------------------\n\n");
                 if (res.headers && res.headers['set-cookie'] && res.headers['set-cookie'].length > 0) {
                     pipe.cookies = res.headers['set-cookie'].join(';');
                 }
                 
                 if(pipe.cookies) {
                     console.log('setting pipe up with cookies.');
-                    console.log('cookies -- ' + pipe.cookies);
                     pipe.pipe = socketioclient.connect(pipe.fetchurl, {
                         'reconnection': false,
                         'extraHeaders': {
