@@ -18,7 +18,9 @@ router.get('/', function(req, res, next) {
 /* GET Map page. */
 router.get('/map', function(req,res) {
     var db = req.db;
-    console.log("\n\n\n\n\n" + process.env + "\n\n\n\n\n");
+    console.log("\n\n\n\n\n");
+    console.log(process.env);
+    console.log("\n\n\n\n\n");
     res.render('map', { 
         mapdata: {
             clientid: uuid.v4(),
