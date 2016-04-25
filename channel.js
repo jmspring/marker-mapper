@@ -63,12 +63,16 @@ var fetch_pipe = {
         request
             .get(pipe.baseurl)
             .on('response', function(res) {
+                console.log("\n\n------------------------------------------------");
+                console.log(res.headers);
+                console.log("------------------------------------------------\n\n");
                 if (res.headers && res.headers['set-cookie'] && res.headers['set-cookie'].length > 0) {
                     pipe.cookies = res.headers['set-cookie'].join(';');
                 }
                 
                 if(pipe.cookies) {
                     console.log('setting pipe up with cookies.');
+                    console.log('cookies -- ' + pipe.cookies);
                     pipe.pipe = socketioclient.connect(pipe.fetchurl, {
                         'reconnection': false,
                         'extraHeaders': {
