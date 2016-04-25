@@ -9,8 +9,14 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+/* GET home page. */
+router.get('/', function(req, res, next) {
+  res.render('index', { title: 'Express' });
+});
+
+
 /* GET Map page. */
-router.get((process.env.PATH_PREFIX ? process.env.PATH_PREFIX : '') + '/map', function(req,res) {
+router.get('/map', function(req,res) {
     var db = req.db;
     res.render('map', { 
         mapdata: {
