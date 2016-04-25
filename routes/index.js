@@ -18,9 +18,6 @@ router.get('/', function(req, res, next) {
 /* GET Map page. */
 router.get('/map', function(req,res) {
     var db = req.db;
-    console.log("\n\n\n\n\n");
-    console.log(process.env);
-    console.log("\n\n\n\n\n");
     res.render('map', { 
         mapdata: {
             clientid: uuid.v4(),
@@ -29,7 +26,9 @@ router.get('/map', function(req,res) {
             lon: config.locations[config.defaultLocation].lon,            
         },
         host: {
-            name: process.env.AGENT_HOSTNAME
+            container: process.env.HOSTNAME,
+            agentip: process.env.HOST,
+            agentport: process.env.PORT0
         }
     });
 });
