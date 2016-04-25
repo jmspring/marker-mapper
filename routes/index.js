@@ -24,6 +24,9 @@ router.get('/map', function(req,res) {
             key: config.mapkey,
             lat: config.locations[config.defaultLocation].lat,
             lon: config.locations[config.defaultLocation].lon,            
+        },
+        host: {
+            name: process.env.AGENT_HOSTNAME
         }
     });
 });

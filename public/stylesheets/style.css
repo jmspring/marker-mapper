@@ -8,6 +8,15 @@ a {
   color: #00B7FF;
 }
 
-html,body,#map {
-  height: 100%
+#serverinfo {
+  margin-left: 10px;
+  height: 20px;
+}
+
+html,body {
+  height: 100%;
+}
+
+#map {
+  height: 95%;
 }
