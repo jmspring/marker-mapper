@@ -25,7 +25,7 @@ block content
         var client = null;
         var connected = false;
         function init_client() {
-            client = io.connect('/client', {
+            client = io.connect('#{markerdata.url}', {
                 'reconnection': true,
                 'reconnectionDelay': 1000,
                 'reconnectionMaxDelay': 3000,

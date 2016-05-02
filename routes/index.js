@@ -17,7 +17,8 @@ router.get('/', function(req, res, next) {
 
 /* GET Map page. */
 router.get('/map', function(req,res) {
-    var db = req.db;
+    var markerurl = (process.env.MARKER_URL == null ? '/client' : process.env.MARKER_URL)
+
     res.render('map', { 
         mapdata: {
             clientid: uuid.v4(),
@@ -29,6 +30,9 @@ router.get('/map', function(req,res) {
             container: process.env.HOSTNAME,
             agentip: process.env.HOST,
             agentport: process.env.PORT0
+        },
+        markerdata: {
+            url: markerurl  
         }
     });
 });
