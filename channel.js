@@ -1,8 +1,4 @@
-var socketio;
-if(process.env.MARKER_PATH != null) {
-    socketio = require('socket.io')({ path: process.env.MARKER_PATH + '/socket.io' });
-} else {
-    socketio = require('socket.io');
+var socketio = require('socket.io');
 }
 var socketioclient = require('socket.io-client');
 var request = require('request');
@@ -169,7 +165,11 @@ function get_fetch_pipe(host, port, socket, clientinfo) {
 var channel = {
     io: null,
     initialize: function(server) {
-        io = socketio(server);
+        if(process.env.MARKER_PATH != null) {
+            io = socketio(server, { path: process.env.MARKER_PATH + '/socket.io' });
+        } else {
+            io = socketio(server);
+        }
         
         var client = io
             .of('/client')
