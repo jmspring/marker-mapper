@@ -17,7 +17,8 @@ router.get('/', function(req, res, next) {
 
 /* GET Map page. */
 router.get('/map', function(req,res) {
-    var markerpath = (process.env.MARKER_PATH == null ? '' : process.env.MARKER_PATH)
+    var markerpath = (process.env.MARKER_PATH == null ? '' : process.env.MARKER_PATH);
+    console.log("MARKER PATH -- " + markerpath);
 
     res.render('map', { 
         mapdata: {
