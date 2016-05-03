@@ -21,7 +21,13 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
-channel.initialize(server);
+var includeChannel = true;
+if(process.env.DISABLE_CHANNEL && process.env.DISABLE_CHANNEL == '1') {
+    includeChannel = false;
+}
+if(includeChannel) {
+    channel.initialize(server);
+}
 
 /**
  * Listen on provided port, on all network interfaces.
