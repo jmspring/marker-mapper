@@ -1,4 +1,9 @@
-var socketio = require('socket.io');
+var socketio;
+if(process.env.MARKER_PATH != null) {
+    socketio = require('socket.io')(http, { path: process.env.MARKER_PATH + '/socket.io' });
+} else {
+    socketio = require('socket.io');
+}
 var socketioclient = require('socket.io-client');
 var request = require('request');
 

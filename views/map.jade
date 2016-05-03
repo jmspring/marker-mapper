@@ -25,12 +25,23 @@ block content
         var client = null;
         var connected = false;
         function init_client() {
-            client = io.connect('#{markerdata.url}', {
-                'reconnection': true,
-                'reconnectionDelay': 1000,
-                'reconnectionMaxDelay': 3000,
-                'reconnectionAttempts': 30
-            });
+            var markerpath = '#{markerdata.path}';
+            if(markerpath && markerpath.length > 0) {
+                client = io.connect('/client', {
+                    'path': markerpath,
+                    'reconnection': true,
+                    'reconnectionDelay': 1000,
+                    'reconnectionMaxDelay': 3000,
+                    'reconnectionAttempts': 30
+                });
+            } else {
+                client = io.connect('/client', {
+                    'reconnection': true,
+                    'reconnectionDelay': 1000,
+                    'reconnectionMaxDelay': 3000,
+                    'reconnectionAttempts': 30
+                });
+            }
             
             // socket.io client events
             client.on('connect', function() { 

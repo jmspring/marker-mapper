@@ -17,7 +17,7 @@ router.get('/', function(req, res, next) {
 
 /* GET Map page. */
 router.get('/map', function(req,res) {
-    var markerurl = (process.env.MARKER_URL == null ? '/client' : process.env.MARKER_URL)
+    var markerpath = (process.env.MARKER_PATH == null ? '' : process.env.MARKER_PATH)
 
     res.render('map', { 
         mapdata: {
@@ -32,7 +32,7 @@ router.get('/map', function(req,res) {
             agentport: process.env.PORT0
         },
         markerdata: {
-            url: markerurl  
+            path: markerpath  
         }
     });
 });
