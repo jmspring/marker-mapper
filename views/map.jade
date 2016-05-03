@@ -28,7 +28,7 @@ block content
             var markerpath = '#{markerdata.path}';
             if(markerpath && markerpath.length > 0) {
                 client = io.connect('/client', {
-                    'path': markerpath,
+                    'path': markerpath + '/socket.io',
                     'reconnection': true,
                     'reconnectionDelay': 1000,
                     'reconnectionMaxDelay': 3000,
