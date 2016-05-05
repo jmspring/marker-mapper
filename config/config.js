@@ -1,5 +1,5 @@
 var config = {
-    defaultLocation: "dublin",
+    defaultLocation: "redmond",
     locations: {
         santacruz: { lat: 36.9741, lon: -122.0308 },
         nevadacity: { lat: 39.2616, lon: -121.0161 },
